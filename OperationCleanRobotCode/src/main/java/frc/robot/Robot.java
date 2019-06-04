@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
   Spark leftMotor = new Spark(1);
   Spark rightMotor = new Spark(0);
   Spark arm = new Spark(9);
+  Spark elevator = new Spark(4);
 
   Drive driveTrain =  new Drive(leftMotor, rightMotor);
   Boolean superFast = false;
@@ -131,6 +132,7 @@ public class Robot extends TimedRobot {
         double leftPos = stick.getRawAxis(1);
         double rightPos = stick.getRawAxis(3);
         double flightArmPos = flightStick.getRawAxis(2);
+	double flightElevatorPos = flightStick.getRawAxis(1);
 
         if (stick.getRawButtonPressed(1)) {
           superFast = !superFast; //speedy boi
@@ -138,6 +140,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean("SuperFasty Mode", superFast);
 
         arm.set(flightArmPos);
+	elevator.set(flightElevatorPos);
         driveTrain.tankDrive(leftPos, rightPos, superFast);
     }
   }
