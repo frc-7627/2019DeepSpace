@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Joystick;
+
+import javax.management.timer.Timer;
 import edu.wpi.first.cameraserver.CameraServer;
 
 
@@ -27,6 +29,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
+  private static final String kMoveAuto = "Move Forward";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -40,6 +43,7 @@ public class Robot extends TimedRobot {
 
   Drive driveTrain =  new Drive(leftMotor, rightMotor);
   Boolean superFast = false;
+  Timer autoTimer = new Timer();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -49,6 +53,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
+    m_chooser.addOption("Move Forward", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
 	  CameraServer.getInstance().startAutomaticCapture(); 
@@ -90,9 +95,28 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
+
       case kCustomAuto:
         // Put custom auto code here
+        autoTimer.start();
+        if (autoTimer.get() < 3) {
+          driveTrain.tankDrive(-.5, .5, false); //360 spinning bois
+        } else {
+          driveTrain.tankDrive(0, 0, false);
+          autoTimer.stop();
+        }
         break;
+
+      case kMoveAuto:
+        autoTimer.start();
+        if (autoTimer.get() < 3) {
+          driveTrain.tankDrive(.5, .5, false); //Move forward
+        } else {
+          driveTrain.tankDrive(0, 0, false);
+          autoTimer.stop();
+        }
+        break;
+
       case kDefaultAuto:
       default:
         // Put default auto code here
