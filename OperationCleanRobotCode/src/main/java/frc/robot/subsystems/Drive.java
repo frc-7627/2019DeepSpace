@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.drive.*;
 
 public class Drive {
     private Spark leftMotor1;
@@ -8,6 +9,8 @@ public class Drive {
 
     private Spark rightMotor2;
     private Spark rightMotor4;
+
+    private MecanumDrive h_drive;
 
     public Drive (Spark leftMotor1, Spark rightMotor2) {
         //Initializes for 2 wheel drive
@@ -24,6 +27,8 @@ public class Drive {
 
         this.rightMotor2 = rightMotor2;
         this.rightMotor4 = rightMotor4;
+
+        h_drive = new MecanumDrive(leftMotor1, leftMotor3, rightMotor2, rightMotor4);
     }
 
     public void tankDrive(double leftValue, double rightValue, boolean superFast) {
@@ -31,18 +36,15 @@ public class Drive {
             leftMotor1.set(leftValue * -.95);
             rightMotor2.set(rightValue * -1);
 
-            if (leftMotor3 != null && rightMotor4 != null) {
-                leftMotor3.set(leftValue * -.95);
-                rightMotor4.set(rightValue * -1);
-            }
         } else {
             leftMotor1.set(leftValue * -.65);
             rightMotor2.set(rightValue * -.7);
+        }
+    }
 
-            if (leftMotor3 != null && rightMotor4 != null) {
-                leftMotor3.set(leftValue * -.65);
-                rightMotor4.set(rightValue * -.7);
-            }
+    public void mecanumDrive(double x_Axis, double y_Axis, double z_Axis) {
+        if (leftMotor3 != null && rightMotor4 != null){
+            m_robotDrive.driveCartesian(z_Axis, y_Axis, x_Axis);
         }
     }
 
