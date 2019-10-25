@@ -44,7 +44,7 @@ public class Drive {
 
     public void mecanumDrive(double x_Axis, double y_Axis, double z_Axis) {
         if (leftMotor3 != null && rightMotor4 != null){
-            m_robotDrive.driveCartesian(z_Axis, y_Axis, x_Axis);
+            h_Drive.driveCartesian(z_Axis, y_Axis, x_Axis);
         }
     }
 
